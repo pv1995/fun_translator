@@ -1,4 +1,12 @@
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
+
+/**
+ * This is the Input component.
+ * The component takes a language and a phrase to be translated, from the user.
+ * @state {array} selectedLanguage - alist of languages for the usr to choose from.
+ * @state {string} inputPhrase - a list of languages for the user to choose from.
+ * @state {boolean} isValid - to check if the input phrase is valid to be translated.
+ */
 
 const Languages = [
   "Yoda",
@@ -7,32 +15,45 @@ const Languages = [
   "Minion",
   "Shakespeare",
   "OldEnglish",
-  "Pig-Latin"
+  "Pig-Latin",
 ];
 
-function Input({getTranslationsAndSave}) {
+function Input({ getTranslationsAndSave }) {
   const [selectedLanguage, setSelectedLanguage] = useState(Languages[0]);
   const inputPhrase = useRef("");
+  const [isValid, setValidity] = useState(true);
   function handleChange(e) {
-    console.log("INPUt DROP DOWN", e.target.value)
+    console.log("INPUt DROP DOWN", e.target.value);
     setSelectedLanguage(e.target.value);
   }
   function handleInputPhrase() {
-    //  document.querySelector('.errorMsg').style.visibility = 'hidden';
-     if (typeof(inputPhrase.current.value)== 'number' || inputPhrase.current.value === "") {
-        document.querySelector('.errorMsg').style.visibility = 'visible';
+    if (
+      /^[0-9]+$/.test(inputPhrase.current.value) ||
+      inputPhrase.current.value === ""
+    ) {
+      setValidity(false);
+      return;
     }
+    setValidity(true);
   }
-  function sendDataToMain(){
-    getTranslationsAndSave(inputPhrase.current.value, selectedLanguage)
+  function sendDataToMain() {
+    getTranslationsAndSave(inputPhrase.current.value, selectedLanguage);
   }
   return (
     <div className="Input">
       <div className="row justify-content-center">
         <div className="col-3">
-          <select className="form-control h-75 mt-2 form-control-lg" onChange={handleChange} value={selectedLanguage}>
-            {Languages.map((l,i) => {
-              return <option name="selectedLang" value={l} key={i}>{l}</option>;
+          <select
+            className="form-control h-75 form-control-lg"
+            onChange={handleChange}
+            value={selectedLanguage}
+          >
+            {Languages.map((l, i) => {
+              return (
+                <option name="selectedLang" value={l} key={i}>
+                  {l}
+                </option>
+              );
             })}
           </select>
         </div>
@@ -50,15 +71,25 @@ function Input({getTranslationsAndSave}) {
               onChange={handleInputPhrase}
             ></textarea>
             <div className="d-flex input-group-append">
-              <button type="button" id="translatePhrase" className="btn-primary input-group-text" onClick={sendDataToMain}>
+              <button
+                type="button"
+                id="translatePhrase"
+                className="btn-primary input-group-text"
+                onClick={sendDataToMain}
+              >
                 TRANSLATE
               </button>
             </div>
           </div>
-          <div className="errorMsg text-red" visibility="hidden"> Please enter valid values! </div>
+          <div id="errorMsg">
+            <span className={isValid ? "err-text-valid" : "err-text-invalid"}>
+              {" "}
+              Please enter valid values!{" "}
+            </span>
+          </div>
         </div>
       </div>
-      </div>
+    </div>
   );
 }
 
