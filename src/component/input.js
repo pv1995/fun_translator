@@ -23,7 +23,6 @@ function Input({ getTranslationsAndSave }) {
   const inputPhrase = useRef("");
   const [isValid, setValidity] = useState(true);
   function handleChange(e) {
-    console.log("INPUt DROP DOWN", e.target.value);
     setSelectedLanguage(e.target.value);
   }
   function handleInputPhrase() {

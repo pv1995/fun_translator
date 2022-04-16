@@ -11,7 +11,6 @@ const HistoryManager = () => {
   obj.connect = () => {
     return new Promise((resolve, reject) => {
       const db = new IndexedDb({ namespace: "MyTranslations" }, function () {
-        // Add a collection to the database;
         db.addCollection("translations");
         resolve(db);
       });
@@ -28,8 +27,6 @@ const HistoryManager = () => {
 
       const db = await obj.connect();
       db.translations.upsert(data, function (res, err) {
-        // Success:
-
         if (err) {
           reject(err);
         }
@@ -43,7 +40,6 @@ const HistoryManager = () => {
       const db = await obj.connect();
       db.translations.find().fetch((res, err) => {
         if (err) {
-          console.log("NO DATATATATATA");
           reject(err);
         }
         resolve(res);

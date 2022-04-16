@@ -29,7 +29,6 @@ function App() {
   }, []);
 
   async function getAllTranslations() {
-    console.log(driver);
     var x = await driver.getHistory();
     setTranslations(x);
   }
@@ -38,16 +37,12 @@ function App() {
     const lang = language.toLowerCase();
     const new_phrase = encodeURI(phrase);
     var url = `https://api.funtranslations.com/translate/${lang}.json?text=${new_phrase}`;
-    console.log(url);
-    console.log("URL-----", url);
-    console.log("APP PHRASE", phrase);
     try {
       await fetch(url, {
         method: "GET",
       })
         .then((response) => response.json())
         .then(async (data) => {
-          console.log(data.contents.translated);
           setCurrentTrans(data.contents.translated);
           await driver.addTranslation(
             phrase,
@@ -55,8 +50,6 @@ function App() {
             language
           );
           await getAllTranslations();
-
-          // console.log("API DID NOT RETURN ANYTHING!!!")
         });
     } catch (error) {
       console.log("API NOT REACHED!!", error.message);
